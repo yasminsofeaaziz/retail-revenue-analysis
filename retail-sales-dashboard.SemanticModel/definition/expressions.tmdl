@@ -1,0 +1,66 @@
+expression Parameter1 = #"Sample File" meta [IsParameterQuery=true, BinaryIdentifier=#"Sample File", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: fd186ec0-349e-458a-bf37-ed3aea2514fe
+	queryGroup: 'Transform File from Sales File\Helper Queries'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Sample File' =
+		let
+		    Source = Folder.Files("C:\Users\YASMIN SOFEA\Downloads\Student Data\Sales File"),
+		    Navigation1 = Source{0}[Content]
+		in
+		    Navigation1
+	lineageTag: bc26f2a0-fc1b-4d1c-b270-de65e09de15d
+	queryGroup: 'Transform File from Sales File\Helper Queries'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transform Sample File' =
+		let
+		    Source = Csv.Document(Parameter1,[Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
+		in
+		    #"Promoted Headers"
+	lineageTag: 15f45c7e-1b1f-4025-8c72-d91432f1bfce
+	queryGroup: 'Transform File from Sales File'
+
+	annotation PBI_ResultType = Table
+
+expression 'Transform File' =
+		let
+		    Source = (Parameter1 as binary) => let
+		    Source = Csv.Document(Parameter1,[Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
+		in
+		    #"Promoted Headers"
+		in
+		    Source
+	lineageTag: cefb350a-53dd-4626-b693-b4098365cdfe
+	queryGroup: 'Transform File from Sales File\Helper Queries'
+
+	annotation PBI_ResultType = Function
+
+expression 'Sales Prep' =
+		let
+		    Source = Folder.Files("C:\Users\YASMIN SOFEA\Downloads\Student Data\Sales File"),
+		    #"Filtered Hidden Files1" = Table.SelectRows(Source, each [Attributes]?[Hidden]? <> true),
+		    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File", each #"Transform File"([Content])),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Source.Name"}),
+		    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File"}),
+		    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File"))),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Table Column1",{{"Source.Name", type text}, {"Order ID", Int64.Type}, {"Date", type date}, {"Product", type text}, {"Country Code", type text}, {"Amount", type number}}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Source.Name"}),
+		    #"Split Column by Delimiter" = Table.SplitColumn(#"Removed Columns", "Product", Splitter.SplitTextByDelimiter(" (", QuoteStyle.Csv), {"Product.1", "Product.2"}),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Product.1", type text}, {"Product.2", type text}}),
+		    #"Replaced Value" = Table.ReplaceValue(#"Changed Type1",")","",Replacer.ReplaceText,{"Product.2"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Replaced Value",{{"Product.1", "Product"}, {"Product.2", "Location"}}),
+		    #"Trimmed Text" = Table.TransformColumns(#"Renamed Columns",{{"Product", Text.Trim, type text}, {"Location", Text.Trim, type text}}),
+		    #"Changed Type2" = Table.TransformColumnTypes(#"Trimmed Text",{{"Amount", Currency.Type}})
+		in
+		    #"Changed Type2"
+	lineageTag: 1ae97c88-2ccb-4551-9842-b0b5ba29a95c
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

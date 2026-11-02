@@ -1,0 +1,52 @@
+table Location
+	lineageTag: 78a9f523-dbc6-4783-9312-2d8ee48b9ea2
+
+	column 'Location ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c431a40d-bf17-41bb-85f2-f17e6bdda99a
+		summarizeBy: none
+		sourceColumn: Location ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Location
+		dataType: string
+		lineageTag: 6c650226-c0b1-4605-91ea-2e74443aaca5
+		summarizeBy: none
+		sourceColumn: Location
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Country Code'
+		dataType: string
+		isHidden
+		lineageTag: 81437fde-cbdf-4b3f-bb6a-9a44dfe6cefa
+		summarizeBy: none
+		sourceColumn: Country Code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Location = m
+		mode: import
+		source =
+				let
+				    Source = #"Sales Prep",
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Location", "Country Code"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"Location"}),
+				    #"Sorted Rows" = Table.Sort(#"Removed Duplicates",{{"Country Code", Order.Ascending}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Sorted Rows", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "Location ID"}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns",{"Location ID", "Location", "Country Code"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,16 @@
+relationship c121009a-e8f5-3264-25aa-4b28c4734acd
+	fromColumn: Sales.'Product ID'
+	toColumn: Products.'Product ID'
+
+relationship ce010f29-82d7-08b1-62d8-c6aa53b2a296
+	fromColumn: Sales.'Location ID'
+	toColumn: Location.'Location ID'
+
+relationship b533f239-754e-6331-c83c-505503e717b8
+	fromColumn: Location.'Country Code'
+	toColumn: Country.'Country Code'
+
+relationship ebe71495-a441-35ad-3c84-72012691221d
+	fromColumn: Sales.Date
+	toColumn: Dates.Date
+

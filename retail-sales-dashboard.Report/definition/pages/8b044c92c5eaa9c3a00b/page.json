@@ -1,0 +1,136 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "8b044c92c5eaa9c3a00b",
+  "displayName": "Analysis by Country",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "fc62c658e8cdea22fc3f",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Country"
+              }
+            },
+            "Property": "Country"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "c",
+              "Entity": "Country",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "c"
+                          }
+                        },
+                        "Property": "Country"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'USA'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "00a41c511d51cebb54d2",
+    "type": "Drillthrough",
+    "parameters": [
+      {
+        "name": "f1e815463882f705cd8c",
+        "boundFilter": "fc62c658e8cdea22fc3f",
+        "asAggregation": false,
+        "qnaSingleSelectRequired": false,
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Country"
+              }
+            },
+            "Property": "Country"
+          }
+        }
+      }
+    ]
+  },
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#8FB0BE'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "0e4323055dcf1fa9ea78",
+      "target": "090663c7c1abcf538d0e",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0e4323055dcf1fa9ea78",
+      "target": "b5a381b96f3e5e94e634",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0e4323055dcf1fa9ea78",
+      "target": "e83fceb273d7555b58b4",
+      "type": "NoFilter"
+    },
+    {
+      "source": "d837d8c2bb8d35a95f8b",
+      "target": "e83fceb273d7555b58b4",
+      "type": "DataFilter"
+    }
+  ]
+}

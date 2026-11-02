@@ -1,0 +1,124 @@
+table Sales
+	lineageTag: 93112784-6288-4d46-89ae-0c1ee514106a
+
+	measure 'Total Revenue' = SUM(Sales[Amount])
+		formatString: "RM"#,0.00;-"RM"#,0.00;"RM"#,0.00
+		lineageTag: d6cbc28e-6d36-40a0-b2a5-f5c669e1e4cf
+
+		annotation PBI_FormatHint = {"currencyCulture":"ms-MY"}
+
+	measure 'Number of Orders' = COUNTROWS(Sales)
+		formatString: #,0
+		lineageTag: ffc07c69-cf4a-4ae2-bc22-b363c2172c27
+
+	measure 'Total Rev Weekend' = CALCULATE([Total Revenue],Dates[isWeekend]="Yes")
+		formatString: "RM"#,0.00;-"RM"#,0.00;"RM"#,0.00
+		lineageTag: 7c7734a0-e733-47cd-902c-60fa60876aa6
+
+		annotation PBI_FormatHint = {"currencyCulture":"ms-MY"}
+
+	measure 'Total Rev Weekday' = CALCULATE([Total Revenue],Dates[isWeekend]="No")
+		formatString: "RM"#,0.00;-"RM"#,0.00;"RM"#,0.00
+		lineageTag: 33f122a1-728f-4ca4-a546-0bfdb87c5c58
+
+		annotation PBI_FormatHint = {"currencyCulture":"ms-MY"}
+
+	measure 'Total Rev PY' = CALCULATE([Total Revenue],SAMEPERIODLASTYEAR(Dates[Date]))
+		formatString: "RM"#,0.00;-"RM"#,0.00;"RM"#,0.00
+		lineageTag: 016ca274-0d72-4983-a300-87577445fd1b
+
+		annotation PBI_FormatHint = {"currencyCulture":"ms-MY"}
+
+	measure 'Total Rev Differences' = [Total Revenue]-[Total Rev PY]
+		formatString: "RM"#,0.00;-"RM"#,0.00;"RM"#,0.00
+		lineageTag: a36360bc-9c52-4793-8fee-4bd8ca3f326d
+
+		annotation PBI_FormatHint = {"currencyCulture":"ms-MY"}
+
+	measure '% Difference of Rev' = DIVIDE([Total Rev Differences],[Total Rev PY],0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 1bedab2d-9e53-461e-8890-c1e363ce6a12
+
+	column 'Order ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: d6d2388b-38d8-4fd0-97ce-1a8cb242402b
+		summarizeBy: count
+		sourceColumn: Order ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: df3992b4-055a-49a1-8365-55e083479bab
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Location ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b5c22179-d9f7-45fe-9439-d8272a2f8c64
+		summarizeBy: none
+		sourceColumn: Location ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: dbbb20ce-395b-453a-98f9-a036f0ed4a45
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Amount
+		dataType: decimal
+		isHidden
+		formatString: "RM"#,0.###############;-"RM"#,0.###############;"RM"#,0.###############
+		lineageTag: f9226309-2826-4b62-9af8-544d5d279f04
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-MY"}
+
+	partition Sales = m
+		mode: import
+		source =
+				let
+				    Source = Table.NestedJoin(#"Sales Prep", {"Location"}, Location, {"Location"}, "Location.1", JoinKind.LeftOuter),
+				    #"Expanded Location.1" = Table.ExpandTableColumn(Source, "Location.1", {"Location ID"}, {"Location.1.Location ID"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Expanded Location.1",{{"Location.1.Location ID", "Location ID"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns",{"Location", "Country Code"}),
+				    #"Merged Queries" = Table.NestedJoin(#"Removed Columns", {"Product"}, Products, {"Product"}, "Products", JoinKind.LeftOuter),
+				    #"Expanded Products" = Table.ExpandTableColumn(#"Merged Queries", "Products", {"Product ID"}, {"Products.Product ID"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Expanded Products",{{"Products.Product ID", "Product ID"}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Renamed Columns1",{"Product"}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Removed Columns1",{"Order ID", "Product ID", "Location ID", "Date", "Amount"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,46 @@
+table Products
+	lineageTag: 16a2159b-46a8-4861-b56c-261af422a03a
+
+	column 'Product ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9a0fc08e-7765-470a-a396-5bfab6abcfed
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 21f0f626-486c-4468-8e5b-e60e3ed4a1c1
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 6315ba7a-1fab-4b5c-9770-b667a60094cc
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Products = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\YASMIN SOFEA\Downloads\Student Data\Products Listing.txt"),[Delimiter="	", Columns=3, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ID", Int64.Type}, {"Product", type text}, {"Category", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"ID", "Product ID"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

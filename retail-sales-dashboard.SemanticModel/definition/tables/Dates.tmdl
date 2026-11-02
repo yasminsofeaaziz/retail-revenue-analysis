@@ -1,0 +1,74 @@
+table Dates
+	lineageTag: 3f9289d9-64e8-443a-b3d6-951c2424040b
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: dd/mm/yy
+		lineageTag: 1b56a127-57dc-45e8-a96a-ffa2df2d071c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Year = YEAR(Dates[Date])
+		formatString: 0
+		lineageTag: 5c4ad4d2-44af-44e2-8cdd-6d795a5a64ac
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number' = MONTH(Dates[Date])
+		isHidden
+		formatString: 0
+		lineageTag: 5eb8e7fb-3339-441d-a4aa-3c1c75db087f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name' = FORMAT(Dates[Date],"MMM")
+		lineageTag: 585214ec-bbec-4ecb-a630-b8131bb1a00e
+		summarizeBy: none
+		sortByColumn: 'Month Number'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day = DAY(Dates[Date])
+		formatString: 0
+		lineageTag: 73f4ccab-0ded-4523-9cec-7eed8e7e1dff
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Number' = WEEKDAY(Dates[Date],2)
+		isHidden
+		formatString: 0
+		lineageTag: 986aea30-0fa3-4c80-b3ef-74f353c3f4c2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Name' = FORMAT(Dates[Date], "DDD")
+		lineageTag: 51f84f34-bc58-473d-8369-7355be8c29c3
+		summarizeBy: none
+		sortByColumn: 'Day Number'
+
+		annotation SummarizationSetBy = Automatic
+
+	column isWeekend = IF(Dates[Day Number]>5,"Yes","No")
+		lineageTag: 6f317f59-f362-4be2-abf3-00f98419c97c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dates = calculated
+		mode: import
+		source = CALENDAR(DATE(YEAR(MIN(Sales[Date])),1,1),DATE(YEAR(MAX(Sales[Date])),12,31))
+
+	annotation PBI_Id = 09d5ec304f5d4ea28452bcfa708ac098
+

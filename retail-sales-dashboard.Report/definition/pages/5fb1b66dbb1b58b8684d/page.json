@@ -1,0 +1,102 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "5fb1b66dbb1b58b8684d",
+  "displayName": "Summary",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "9d7ca6af27e360b4a7c7",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Country"
+              }
+            },
+            "Property": "Country"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "2c1b87e76675607b721e",
+    "type": "Drillthrough",
+    "parameters": [
+      {
+        "name": "21e83b889c6d7aa98689",
+        "boundFilter": "9d7ca6af27e360b4a7c7",
+        "asAggregation": false,
+        "qnaSingleSelectRequired": false,
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Country"
+              }
+            },
+            "Property": "Country"
+          }
+        }
+      }
+    ]
+  },
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#8FB0BE'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "a26e2a8755a23a6813e6",
+      "target": "0c95ca6481cbd2455bd8",
+      "type": "NoFilter"
+    },
+    {
+      "source": "a26e2a8755a23a6813e6",
+      "target": "94e135389ed1a77fd0fe",
+      "type": "NoFilter"
+    },
+    {
+      "source": "20f5cd744fe6f58b3042",
+      "target": "0c95ca6481cbd2455bd8",
+      "type": "NoFilter"
+    },
+    {
+      "source": "20f5cd744fe6f58b3042",
+      "target": "94e135389ed1a77fd0fe",
+      "type": "NoFilter"
+    },
+    {
+      "source": "20f5cd744fe6f58b3042",
+      "target": "a26e2a8755a23a6813e6",
+      "type": "DataFilter"
+    }
+  ]
+}
