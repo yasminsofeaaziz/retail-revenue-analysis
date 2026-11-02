@@ -10,7 +10,7 @@ This project provides an end-to-end data integration, modeling, and interactive 
 - **Products Listing (`Products Listing.txt`):** Tab-delimited text file serving as the product master list, containing `ID`, `Product` name, and product `Category` mapping (Beverages, Food, Pastries).
 - **Countries Lookup (`Countries List.xlsx`):** Excel workbook containing ISO country code mappings (`Country Code` to full `Country` name).
 
-## Tools & Methodology:
+## Tools & Methodology
 
 **Power BI Desktop:** Core tool for data modeling, DAX calculation development, interactive visualization design, and report publishing.
 
@@ -18,7 +18,7 @@ This project provides an end-to-end data integration, modeling, and interactive 
 
 **DAX (Data Analysis Expressions):** Calculated tables, time-intelligence functions, dynamic measures, KPI variance logic, and calendar tables.
 
-## Process & Data Pipeline:
+## Process & Data Pipeline
 
 1. **Data ETL & Text Parsing (Power Query):**
     - Appended and transformed 4 historical CSV sales records into a unified fact table totaling 1,220,615 orders.
@@ -42,29 +42,32 @@ This project provides an end-to-end data integration, modeling, and interactive 
 5. **Dashboard Design & User Experience:**
     - Configured report pages with cross-filtering interactions, dynamic year slicers, card visual KPIs, line graphs for monthly trends, and country drill-through report pages.
 
-## Dashboard Features & Key Insights:
+## Dashboard Features & Key Insights
 
 1. **Summary Page**
     - **High-Level Metrics:** Total global revenue reached RM4,272,199 across 1,220,615 total orders.
     - **Category Distribution:** Sales are heavily driven by Beverages (RM1.71M) and Food (RM1.70M), which combined account for ~80% of total revenue, while Pastries generated RM0.86M.
     - **Geographic Revenue:** Global revenue distribution map highlights key high-performing markets across Europe, North America, and Oceania.
+      <img width="1432" height="805" alt="summary-page" src="https://github.com/user-attachments/assets/bf99130e-8522-412b-9fc6-d071563160bf" />
 
 2. **Yearly Variance Analysis**
     - **Target Tracking (2024 KPI):** 2024 total revenue reached RM1,396.4K, outperforming the set goal of RM1,335.8K by +4.54% across 399,100 orders.
     - **Monthly Revenue Trajectory:** Identified noticeable seasonal troughs in February (RM108.3K) and June (RM114.2K), with peaks occurring in March (RM118.9K), August (RM118.6K), and October (RM118.3K).
+      <img width="1433" height="803" alt="yearly-variance-analysis" src="https://github.com/user-attachments/assets/8680e7cd-d8c0-46b5-8763-063cacb2a3e9" />
 
 3. **Analysis by Country (e.g. USA analysis)**
     - **Regional Breakdown:** The USA market generated RM802,181 in total revenue across 229,245 orders.
     - **City Performance:** Top city locations include Boston (RM90,280.77), Kirkland (RM90,078.46), and Seattle (RM89,896.24).
     - **Top Product Volume:** Green Tea (RM32,844.67; 9,379 orders), Apple Juice (RM32,706.36; 9,321 orders), and Still Water (RM32,705.27; 9,340 orders) lead product volume in the region.
+      <img width="1432" height="805" alt="analysis-by-country-usa" src="https://github.com/user-attachments/assets/2ee9fe71-8a0c-43dc-bae2-15d6d3f5261d" />
 
-## Recommendations:
+## Recommendations
 
 1. **Cross-Selling & Bundling:** Combine low-volume Pastries with top-selling Beverages or Food items (e.g., breakfast coffee and pastry bundles) to lift average order value.
 2. **Mitigate Seasonal Dips:** Implement targeted promotional campaigns or seasonal menu offerings during mid-quarter slow months (specifically February and June) to stabilize cash flow.
 3. **Regional Inventory Optimization:** Direct marketing budgets and supply chain focus toward top-performing urban hubs (e.g., Boston, Kirkland, Seattle) while expanding local distribution in lower-volume cities.
 
-## Limitations:
+## Limitations
 
 - **Cost & Margin Exclusions:** The current sales dataset captures top-line gross revenue only and lacks Cost of Goods Sold (COGS), prevent direct net profit margin analysis.
 - **Unstructured Location Strings in Source Data:** Raw sales CSV files stored city names within product description text strings, requiring transformation during ETL preprocessing.
